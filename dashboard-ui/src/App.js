@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from 'react';
+import SockJsClient from 'react-stomp';
 
-function App() {
+const SOCKET_URL = 'http://localhost:8081/ws-message';
+
+const App = () => {
+  const [message, setMessage] = useState('You server message here.');
+
+  const onConnected = useCallback(() => {
+    console.log("Connected!!")
+  }, []);
+
+  const onDisconnected = useCallback(() => {
+    console.log("Disconnected!!")
+  }, []);
+
+  const onMessageReceived = useCallback((msg) => {
+    console.log("Received!!", msg)
+    setMessage(msg.title);
+  }, [setMessage]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <SockJsClient
+        url={SOCKET_URL}
+        topics={['/topic/ws-reddit-posts']}
+        onConnect={onConnected}
+        onDisconnect={onDisconnected}
+        onMessage={onMessageReceived}
+        debug={false}
+      />
+      <div>{message}</div>
     </div>
   );
 }

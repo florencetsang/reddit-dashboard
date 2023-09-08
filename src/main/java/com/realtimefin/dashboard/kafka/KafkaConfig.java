@@ -1,4 +1,4 @@
-package com.realtimefin.dashboard;
+package com.realtimefin.dashboard.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class KafkaConfig {
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
-    public ConcurrentKafkaListenerContainerFactory redditCommentsListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, String> redditCommentsListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(redditCommentsConsumerFactory());
         return factory;
@@ -50,9 +50,9 @@ public class KafkaConfig {
         return new DefaultKafkaConsumerFactory<>(config);
     }
 
-    public ConcurrentKafkaListenerContainerFactory redditPostsListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, String> redditPostsListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(redditCommentsConsumerFactory());
+        factory.setConsumerFactory(redditPostsConsumerFactory());
         return factory;
     }
 }
